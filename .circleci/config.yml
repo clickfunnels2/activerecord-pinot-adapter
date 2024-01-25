@@ -42,7 +42,7 @@ jobs:
       - ruby/install-deps
       - run:
           name: "Run Tests"
-          command: sleep 35 && bundle exec rake test
+          command: sleep 50 && bundle exec rake test
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
