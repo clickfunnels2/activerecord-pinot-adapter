@@ -14,18 +14,22 @@ jobs:
     docker:
       - image: cimg/ruby:3.1.0
       - image: zookeeper:3.5.6
+        name: pinot-zookeeper
         environment:
           ZOOKEEPER_CLIENT_PORT: 2181
           ZOOKEEPER_TICK_TIME: 2000
       - image: apachepinot/pinot:1.0.0
+        name: pinot-controller
         command: "StartController -zkAddress pinot-zookeeper:2181"
         environment:
           JAVA_OPTS: "-Dplugins.dir=/opt/pinot/plugins -Xms1G -Xmx4G -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xloggc:gc-pinot-controller.log"
       - image: apachepinot/pinot:1.0.0
+        name: pinot-broker
         command: "StartBroker -zkAddress pinot-zookeeper:2181"
         environment:
           JAVA_OPTS: "-Dplugins.dir=/opt/pinot/plugins -Xms4G -Xmx4G -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xloggc:gc-pinot-broker.log"
       - image: apachepinot/pinot:1.0.0
+        name: pinot-server
         command: "StartServer -zkAddress pinot-zookeeper:2181"
         environment:
           JAVA_OPTS: "-Dplugins.dir=/opt/pinot/plugins -Xms4G -Xmx16G -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xloggc:gc-pinot-server.log"
