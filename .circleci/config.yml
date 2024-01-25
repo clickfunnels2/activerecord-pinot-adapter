@@ -25,12 +25,12 @@ jobs:
           JAVA_OPTS: "-Dplugins.dir=/opt/pinot/plugins -Xms1G -Xmx4G -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xloggc:gc-pinot-controller.log"
       - image: apachepinot/pinot:1.0.0
         name: pinot-broker
-        command: "sleep 20 && StartBroker -zkAddress pinot-zookeeper:2181"
+        command: sh -c "sleep 20 && StartBroker -zkAddress pinot-zookeeper:2181"
         environment:
           JAVA_OPTS: "-Dplugins.dir=/opt/pinot/plugins -Xms4G -Xmx4G -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xloggc:gc-pinot-broker.log"
       - image: apachepinot/pinot:1.0.0
         name: pinot-server
-        command: "sleep 30 && StartServer -zkAddress pinot-zookeeper:2181"
+        command: sh -c "sleep 30 && StartServer -zkAddress pinot-zookeeper:2181"
         environment:
           JAVA_OPTS: "-Dplugins.dir=/opt/pinot/plugins -Xms4G -Xmx16G -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xloggc:gc-pinot-server.log"
     executor: ruby/default
