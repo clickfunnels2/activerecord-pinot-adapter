@@ -16,8 +16,28 @@ class Activerecord::Pinot::TestAdapter < Minitest::Test
   end
 
   focus
+  def test_setup_on_test
+    puts @client.delete_segments("posts")
+    sleep 1
+    puts @client.delete_table("posts")
+    5.downto(1) do |n|
+      puts "#{n}.."
+      sleep 1
+    end
+    puts "create schema"
+    puts @client.create_schema(File.read("./test/fixtures/posts_schema.json"))
+    puts "create table"
+    puts @client.create_table(File.read("./test/fixtures/posts_table.json"))
+    puts "ingest json"
+    file = File.new(File.expand_path("./test/fixtures/posts.json"))
+    puts @client.ingest_json(file, table: "posts_OFFLINE")
+    sleep 1
+    assert_equal 3, Post.count
+  end
+
   def test_focus
-    puts Post.new.attributes
+    puts Post.columns_hash
+    puts Metric.new.attributes
   end
 
   def test_that_it_has_a_version_number

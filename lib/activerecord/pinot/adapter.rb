@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 
 require_relative "adapter/version"
-
-module Activerecord
-  module Pinot
-    module Adapter
-      class Error < StandardError; end
-      # Your code goes here...
-    end
-  end
-end
+require "pinot"
+require "active_record"
+require "active_record/pinot/adapter"
