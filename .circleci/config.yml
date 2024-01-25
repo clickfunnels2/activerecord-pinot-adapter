@@ -13,21 +13,25 @@ jobs:
   build:
     docker:
       - image: cimg/ruby:3.1.0
+      - image: zookeeper:3.5.6
+        environment:
+          ZOOKEEPER_CLIENT_PORT: 2181
+          ZOOKEEPER_TICK_TIME: 2000
+      - image: apachepinot/pinot:1.0.0
+        command: "StartController -zkAddress pinot-zookeeper:2181"
+        environment:
+          JAVA_OPTS: "-Dplugins.dir=/opt/pinot/plugins -Xms1G -Xmx4G -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xloggc:gc-pinot-controller.log"
+      - image: apachepinot/pinot:1.0.0
+        command: "StartBroker -zkAddress pinot-zookeeper:2181"
+        environment:
+          JAVA_OPTS: "-Dplugins.dir=/opt/pinot/plugins -Xms4G -Xmx4G -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xloggc:gc-pinot-broker.log"
+      - image: apachepinot/pinot:1.0.0
+        command: "StartServer -zkAddress pinot-zookeeper:2181"
+        environment:
+          JAVA_OPTS: "-Dplugins.dir=/opt/pinot/plugins -Xms4G -Xmx16G -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -Xloggc:gc-pinot-server.log"
     executor: ruby/default
     steps:
       - checkout
-      - run:
-          name: Install Docker Compose
-          environment:
-            COMPOSE_VERSION: '1.29.2'
-          command: |
-            curl -L "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o ~/docker-compose
-            chmod +x ~/docker-compose
-            sudo mv ~/docker-compose /usr/local/bin/docker-compose
-      - setup_remote_docker
-      - run:
-          name: Start all services declared in docker-compose.yml
-          command: docker-compose up -d
       - run:
           name: Which bundler?
           command: bundle -v
