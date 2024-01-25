@@ -17,9 +17,15 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Start all services declared in docker-compose.yml
+          command: docker-compose up -d
+      - run:
           name: Which bundler?
           command: bundle -v
       - ruby/install-deps
+      - tests:
+          name: "Run Tests"
+          command: bundle exec rake test
 
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
