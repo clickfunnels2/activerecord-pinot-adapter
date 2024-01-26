@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "test_helper"
-require "active_record/connection_adapters/pinot_adapter"
 
 class ActiveRecord::ConnectionAdapters::PinotAdapter::TestTableStructure < Minitest::Test
   def setup

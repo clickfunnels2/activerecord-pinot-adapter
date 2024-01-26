@@ -2,6 +2,7 @@
 
 require "pinot"
 require "active_record"
+require_relative "../connection_adapters/pinot_adapter"
 
 module ActiveRecord
   module Pinot

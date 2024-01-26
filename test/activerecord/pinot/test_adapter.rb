@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "test_helper"
-require "active_record/database_configurations"
 
 class Metric < ActiveRecord::Base
 end

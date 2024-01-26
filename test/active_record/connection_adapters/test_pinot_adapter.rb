@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "test_helper"
-require "active_record/database_configurations"
 
 class Metric < ActiveRecord::Base
 end
@@ -33,7 +32,7 @@ class ActiveRecord::ConnectionAdapters::TestPinotAdapter < Minitest::Test
     puts "ingest json"
     file = File.new(File.expand_path("./test/fixtures/posts.json"))
     puts @client.ingest_json(file, table: "posts_OFFLINE")
-    sleep 1
+    sleep 2
     assert_equal 3, Post.count
   end
 

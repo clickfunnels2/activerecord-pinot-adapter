@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/fernandes/pinot.git
-  revision: d6090933b4db5efc6bba2516c556780f0f24f664
+  revision: 924f41bb21e7b79b58a3656cd7a766870b396c15
   specs:
     pinot (0.1.0)
       httpx

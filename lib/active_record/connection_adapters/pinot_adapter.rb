@@ -1,5 +1,4 @@
-require "active_record/pinot/adapter"
-require "active_record/connection_adapters/pinot_adapter/table_structure"
+require_relative "pinot_adapter/table_structure"
 
 module ActiveRecord
   module ConnectionHandling # :nodoc:
@@ -46,7 +45,6 @@ module ActiveRecord
         type_metadata = fetch_type_metadata(field["type"])
         default_value = extract_value_from_default(default)
         default_function = extract_default_function(default_value, default)
-        rowid = is_column_the_rowid?(field, definitions)
 
         Column.new(
           field["name"],
