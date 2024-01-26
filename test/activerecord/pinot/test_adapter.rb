@@ -11,8 +11,8 @@ end
 
 class Activerecord::Pinot::TestAdapter < Minitest::Test
   def setup
-    @client = Pinot::Client.new(host: :localhost, port: 8099, admin_port: 9000)
-    ActiveRecord::Base.establish_connection(adapter: "pinot", host: :localhost, port: 8099, admin_port: 9000)
+    @client = Pinot::Client.new(host: :localhost, port: 8099, controller_port: 9000)
+    ActiveRecord::Base.establish_connection(adapter: "pinot", host: :localhost, port: 8099, controller_port: 9000)
   end
 
   focus
