@@ -18,7 +18,8 @@ class Activerecord::Pinot::TestAdapter < Minitest::Test
 
   focus
   def test_focus
-    puts Post.new.attributes
+    expected_attributes = %w[id slug author_id comments created_at]
+    assert_equal expected_attributes, Post.new.attributes.keys
   end
 
   def test_that_it_has_a_version_number
