@@ -9,7 +9,7 @@ end
 class Post < ActiveRecord::Base
 end
 
-class Activerecord::Pinot::TestAdapter < Minitest::Test
+class ActiveRecord::ConnectionAdapters::TestPinotAdapter < Minitest::Test
   def setup
     host = ENV.fetch("PINOT_HOST", :localhost)
     controller_host = ENV.fetch("PINOT_CONTROLLER_HOST", :localhost)
