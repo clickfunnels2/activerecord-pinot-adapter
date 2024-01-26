@@ -23,8 +23,9 @@ module ActiveRecord
         @pinot_host = config.fetch(:host)
         @pinot_port = config.fetch(:port)
         @pinot_controller_port = config.fetch(:controller_port)
+        @pinot_controller_host = config.fetch(:controller_host) || @pinot_host
         # TODO: does it need connection pooling?
-        @pinot_client = ::Pinot::Client.new(host: @pinot_host, port: @pinot_port, controller_port: @pinot_controller_port)
+        @pinot_client = ::Pinot::Client.new(host: @pinot_host, port: @pinot_port, controller_host: @pinot_controller_host, controller_port: @pinot_controller_port)
 
         super(config)
       end
