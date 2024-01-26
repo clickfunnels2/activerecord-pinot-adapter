@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/fernandes/pinot.git
-  revision: 7e6ef891b03947bca2a38747914a0500b00da007
+  revision: 924f41bb21e7b79b58a3656cd7a766870b396c15
   specs:
     pinot (0.1.0)
       httpx
@@ -136,6 +136,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-22
+  x86_64-linux
 
 DEPENDENCIES
   activerecord-pinot-adapter!

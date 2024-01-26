@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "test_helper"
-require "active_record/database_configurations"
 
 class Metric < ActiveRecord::Base
 end
@@ -11,13 +10,16 @@ end
 
 class Activerecord::Pinot::TestAdapter < Minitest::Test
   def setup
-    @client = Pinot::Client.new(host: :localhost, port: 8099, admin_port: 9000)
-    ActiveRecord::Base.establish_connection(adapter: "pinot", host: :localhost, port: 8099, admin_port: 9000)
+    host = ENV.fetch("PINOT_HOST", :localhost)
+    controller_host = ENV.fetch("PINOT_CONTROLLER_HOST", :localhost)
+    @client = Pinot::Client.new(host: host, controller_host: controller_host, port: 8099, controller_port: 9000)
+    ActiveRecord::Base.establish_connection(adapter: "pinot", host: host, controller_host: controller_host, port: 8099, controller_port: 9000)
   end
 
   focus
   def test_focus
-    puts Post.new.attributes
+    expected_attributes = %w[id slug author_id comments created_at]
+    assert_equal expected_attributes, Post.new.attributes.keys
   end
 
   def test_that_it_has_a_version_number

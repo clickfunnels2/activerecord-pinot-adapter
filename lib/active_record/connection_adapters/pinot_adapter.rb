@@ -1,5 +1,4 @@
-require "active_record/pinot/adapter"
-require "active_record/connection_adapters/pinot_adapter/table_structure"
+require_relative "pinot_adapter/table_structure"
 
 module ActiveRecord
   module ConnectionHandling # :nodoc:
@@ -23,9 +22,10 @@ module ActiveRecord
       def initialize(config = {})
         @pinot_host = config.fetch(:host)
         @pinot_port = config.fetch(:port)
-        @pinot_admin_port = config.fetch(:admin_port)
+        @pinot_controller_port = config.fetch(:controller_port)
+        @pinot_controller_host = config.fetch(:controller_host) || @pinot_host
         # TODO: does it need connection pooling?
-        @pinot_client = ::Pinot::Client.new(host: @pinot_host, port: @pinot_port, admin_port: @pinot_admin_port)
+        @pinot_client = ::Pinot::Client.new(host: @pinot_host, port: @pinot_port, controller_host: @pinot_controller_host, controller_port: @pinot_controller_port)
 
         super(config)
       end
@@ -46,7 +46,6 @@ module ActiveRecord
         type_metadata = fetch_type_metadata(field["type"])
         default_value = extract_value_from_default(default)
         default_function = extract_default_function(default_value, default)
-        rowid = is_column_the_rowid?(field, definitions)
 
         Column.new(
           field["name"],

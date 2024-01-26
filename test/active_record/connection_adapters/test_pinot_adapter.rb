@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "test_helper"
-require "active_record/database_configurations"
 
 class Metric < ActiveRecord::Base
 end
@@ -9,29 +8,16 @@ end
 class Post < ActiveRecord::Base
 end
 
-class Activerecord::Pinot::TestAdapter < Minitest::Test
+class ActiveRecord::ConnectionAdapters::TestPinotAdapter < Minitest::Test
   def setup
-    @client = Pinot::Client.new(host: :localhost, port: 8099, admin_port: 9000)
-    ActiveRecord::Base.establish_connection(adapter: "pinot", host: :localhost, port: 8099, admin_port: 9000)
+    host = ENV.fetch("PINOT_HOST", :localhost)
+    controller_host = ENV.fetch("PINOT_CONTROLLER_HOST", :localhost)
+    @client = Pinot::Client.new(host: host, controller_host: controller_host, port: 8099, controller_port: 9000)
+    ActiveRecord::Base.establish_connection(adapter: "pinot", host: host, controller_host: controller_host, port: 8099, controller_port: 9000)
   end
 
   focus
-  def test_setup_on_test
-    puts @client.delete_segments("posts")
-    sleep 1
-    puts @client.delete_table("posts")
-    5.downto(1) do |n|
-      puts "#{n}.."
-      sleep 1
-    end
-    puts "create schema"
-    puts @client.create_schema(File.read("./test/fixtures/posts_schema.json"))
-    puts "create table"
-    puts @client.create_table(File.read("./test/fixtures/posts_table.json"))
-    puts "ingest json"
-    file = File.new(File.expand_path("./test/fixtures/posts.json"))
-    puts @client.ingest_json(file, table: "posts_OFFLINE")
-    sleep 1
+  def test_count_correctly
     assert_equal 3, Post.count
   end
 
