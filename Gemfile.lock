@@ -1,14 +1,7 @@
-GIT
-  remote: https://github.com/fernandes/pinot.git
-  revision: 924f41bb21e7b79b58a3656cd7a766870b396c15
-  specs:
-    pinot (0.1.0)
-      httpx
-
 PATH
   remote: .
   specs:
-    activerecord-pinot-adapter (0.1.0)
+    activerecord-pinot-adapter (0.1.1)
       activerecord (>= 5.2.0, < 7.2)
       pinot
 
@@ -57,7 +50,7 @@ GEM
       guard-compat (~> 1.2)
       minitest (>= 3.0)
     http-2-next (1.0.3)
-    httpx (1.2.1)
+    httpx (1.2.5)
       http-2-next (>= 1.0.3)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
@@ -86,6 +79,8 @@ GEM
     parser (3.3.0.4)
       ast (~> 2.4.1)
       racc
+    pinot (0.1.1)
+      httpx
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -146,7 +141,7 @@ DEPENDENCIES
   minitest (~> 5.0)
   minitest-focus
   minitest-reporters
-  pinot!
+  pinot
   rake (~> 13.0)
   standard (~> 1.3)
 
