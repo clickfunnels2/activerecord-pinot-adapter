@@ -17,20 +17,40 @@ module ActiveRecord
         "INT" => Type::Integer.new,
         "TIMESTAMP" => Type::DateTime.new,
         "FLOAT" => Type::Decimal.new,
-        "LONG" => Type::Decimal.new
+        "LONG" => Type::Decimal.new,
+        "STRING" => Type::String.new,
+        "JSON" => ActiveRecord::Type::Json.new
       }
       def initialize(config = {})
         @pinot_host = config.fetch(:host)
         @pinot_port = config.fetch(:port)
         @pinot_controller_port = config.fetch(:controller_port)
         @pinot_controller_host = config.fetch(:controller_host) || @pinot_host
+        @pinot_socks5_uri = config.fetch(:socks5_uri, nil)
+        @pinot_bearer_token = config.fetch(:bearer_token, nil)
+        @pinot_protocol = config.fetch(:protocol, "http")
+        @pinot_query_options = config.fetch(:query_options, {})
         # TODO: does it need connection pooling?
-        @pinot_client = ::Pinot::Client.new(host: @pinot_host, port: @pinot_port, controller_host: @pinot_controller_host, controller_port: @pinot_controller_port)
+
+        @pinot_client = ::Pinot::Client.new(
+          host: @pinot_host,
+          port: @pinot_port,
+          controller_host: @pinot_controller_host,
+          controller_port: @pinot_controller_port,
+          protocol: @pinot_protocol,
+          socks5_uri: @pinot_socks5_uri,
+          bearer_token: @pinot_bearer_token,
+          query_options: @pinot_query_options
+        )
 
         super(config)
       end
 
       def default_prepared_statements
+        false
+      end
+
+      def prepared_statements
         false
       end
 
@@ -40,7 +60,11 @@ module ActiveRecord
         @table_structure.sort_by! { |x| x[:name] }
       end
 
-      def new_column_from_field(table_name, field, definitions)
+      def data_sources
+        @pinot_data_sources ||= @pinot_client.tables["tables"]
+      end
+
+      def new_column_from_field(table_name, field, definitions = nil)
         default = nil
 
         type_metadata = fetch_type_metadata(field["type"])
@@ -116,11 +140,13 @@ module ActiveRecord
         )
       end
 
-      def data_source_sql(name = nil, type: nil)
+      def exec_query(sql, name = "SQL", binds = [], prepare: false)
+        internal_exec_query(sql, name, binds, prepare: prepare, async: false)
       end
 
       def primary_keys(table_name)
-        []
+        # TODO: implement
+        [:id]
       end
     end
 

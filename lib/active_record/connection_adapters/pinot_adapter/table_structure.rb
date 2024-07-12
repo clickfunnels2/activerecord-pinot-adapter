@@ -11,6 +11,7 @@ module ActiveRecord
               "pinot_type" => "dimension"
             }
           end
+          schema["metricFieldSpecs"] ||= []
           schema["metricFieldSpecs"].each do |f|
             fields << {
               "name" => f["name"],

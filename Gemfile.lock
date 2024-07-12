@@ -3,7 +3,7 @@ PATH
   specs:
     activerecord-pinot-adapter (0.1.1)
       activerecord (>= 5.2.0, < 7.2)
-      pinot
+      pinot (>= 0.2.0)
 
 GEM
   remote: https://rubygems.org/
@@ -79,7 +79,7 @@ GEM
     parser (3.3.0.4)
       ast (~> 2.4.1)
       racc
-    pinot (0.1.1)
+    pinot (0.2.0)
       httpx
     pry (0.14.2)
       coderay (~> 1.1)
